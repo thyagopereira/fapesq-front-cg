@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react'
 import axios from 'axios'
+import {Link} from 'react-router-dom'
 import {Form,Table,Button} from 'react-bootstrap'
-import {extrairEstados,extrairTiposTeste,extrairResultados,formatData,extrairMunicipios,extrairBairros} from '../utils/Utils'
+import { MdVisibility } from "react-icons/md";
+import {extrairEstados,extrairTiposTeste,extrairResultados,formatData,extrairMunicipios,extrairBairros,removerEspacosBrancos} from '../utils/Utils'
+import ModalViewRegistro from './ModalViewRegistro'
 
 function Registros(){
 	
@@ -14,8 +17,21 @@ function Registros(){
 	const [estadoSelected,setEstadoSelected] = React.useState(undefined);
 	const [municipioSelected,setMunicipioSelected] = React.useState(undefined);
 
-	//const [resultados,setResultados] = React.useState([]);
+	const [show, setShow] = React.useState(false);
+	const [registroSelecionado, setRegistroSelecionado] = React.useState(undefined);
 
+  	const handleClose = () => {
+  		setShow(false)
+  		setRegistroSelecionado(undefined)
+  	}
+  	const handleShow = () => setShow(true);
+
+
+	//const [resultados,setResultados] = React.useState([]);
+	function openModalRegistro(r){
+		setRegistroSelecionado(r)
+		setShow(true)
+	}
 
     useEffect(() => {
         const fetchData = async () => {
@@ -119,6 +135,7 @@ function Registros(){
 
 	return(
 		<div className='animated fadeIn'>
+			<ModalViewRegistro show={show} handleClose={handleClose} registro={registroSelecionado}/>
   			<div align='justify'>
 	  			<div className='row'>
 	  				<div className='col-2 mr-0'>
@@ -178,21 +195,23 @@ function Registros(){
   				<div className='scroll-y h-600 mt-2'>
   					<Table hover striped bordered responsive>
   						<thead>
-						    <tr className='f-s-13'>
-						      <th className='py-1'>Data Notificação</th>
-						      <th className='py-1'>Tipo de teste</th>
-						      <th className='py-1'>Estado</th>
-						      <th className='py-1'>Município</th>
-						      <th className='py-1'>Bairro</th>
-						      <th className='py-1'>Resultado</th>
-						      <th className='py-1'>CEP</th>
+						    <tr className='f-s-13 text-center align-middle'>
+						      <th className='py-1 col-width-20 align-middle'>View</th>
+						      <th className='py-1 col-width-50 align-middle'>Data Notificação</th>
+						      <th className='py-1 align-middle'>Tipo de teste</th>
+						      <th className='py-1 align-middle'>Estado</th>
+						      <th className='py-1 align-middle'>Município</th>
+						      <th className='py-1 align-middle'>Bairro</th>
+						      <th className='py-1 align-middle'>Resultado</th>
+						      <th className='py-1 align-middle'>CEP</th>
 						    </tr>
 						</thead>
 						<tbody>
 							{registrosFiltrados.map( r => 
 									<tr key={r.id}>
+										<td className='py-0 f-s-12 text-center'><Link onClick={()=> openModalRegistro(r)}><MdVisibility /></Link></td>
 										<td className='py-0 f-s-12'>{formatData(r.dataNotificacao)}</td>
-										<td className='py-0 f-s-12'>{r.tipoTeste}</td>
+										<td className='py-0 f-s-12'>{removerEspacosBrancos(r.tipoTeste)}</td>
 										<td className='py-0 f-s-12'>{r.estadoResidencia}</td>
 										<td className='py-0 f-s-12'>{r.municipio}</td>
 										<td className='py-0 f-s-12'>{r.bairro}</td>

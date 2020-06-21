@@ -59,3 +59,7 @@ export function formatData(data){
 	}
   	return dataStr
 }
+
+export function removerEspacosBrancos(string){
+	return string.replace('','').replace('','')
+}

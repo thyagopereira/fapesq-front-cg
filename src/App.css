@@ -64,3 +64,10 @@
 .h-25{
   height: 25px;
 }
+
+.col-width-50{
+  width:50px;
+}
+.col-width-20{
+  width:20px;
+}
