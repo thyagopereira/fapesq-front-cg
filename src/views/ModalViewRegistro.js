@@ -18,11 +18,11 @@ function ModalViewRegistro(props) {
 		      centered
 		      onHide={props.handleClose}
 		    >
-		      <Modal.Header closeButton>
+		      <Modal.Header closeButton className='py-0 my-1'>
 		      <div>Detalhes do registro selecionado</div>
 		      </Modal.Header>
 		      <Modal.Body>   
-		        <div className='f-s-14'>
+		        <div className='f-s-14 scroll-y h-450'>
 		        	<Table bordered striped hover>
 		        		<tbody className='py-0 f-s-12'>
 							<tr >
@@ -145,8 +145,8 @@ function ModalViewRegistro(props) {
 		        	</Table>
 		        </div>
 		      </Modal.Body>
-		      <Modal.Footer>
-		        <Button className='shadow-none' onClick={() => dismissAlert()}>Fechar</Button>
+		      <Modal.Footer className='py-0 my-1'>
+		        <Button variant='outline-info' size='sm' className='shadow-none' onClick={() => dismissAlert()}>Fechar</Button>
 		      </Modal.Footer>
 		    </Modal>
 		</div>

@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
-import {Form,Table,Button} from 'react-bootstrap'
+import {Form,Table,Button,Pagination} from 'react-bootstrap'
 import { MdVisibility } from "react-icons/md";
-import {extrairEstados,extrairTiposTeste,extrairResultados,formatData,extrairMunicipios,extrairBairros,removerEspacosBrancos} from '../utils/Utils'
+import {BACK_END_URL,extrairEstados,extrairTiposTeste,extrairResultados,formatData,extrairMunicipios,extrairBairros,removerEspacosBrancos} from '../utils/Utils'
 import ModalViewRegistro from './ModalViewRegistro'
 
 function Registros(){
@@ -19,6 +19,15 @@ function Registros(){
 
 	const [show, setShow] = React.useState(false);
 	const [registroSelecionado, setRegistroSelecionado] = React.useState(undefined);
+	const [numeroRegistrosExibidos,setNumeroRegistrosExibidos] = React.useState(20);
+	const [activePage,setActivePage] = React.useState(1);
+	const [firstPage,setFirstPage] = React.useState(1); //primeira pagina mostrada
+	const [lastPage,setLastPage] = React.useState(10); //ultima pagina mostrada
+	const [maxPage,setMaxPage] = React.useState(10);
+	const [paginationItems,setPaginationItems] = React.useState([]);
+	const [firstRecord,setFirstRecord] = React.useState(1);
+	const [lastRecord,setLastRecord] = React.useState(19);
+	const [registrosExibidos,setRegistrosExibidos] = React.useState([]);
 
   	const handleClose = () => {
   		setShow(false)
@@ -33,19 +42,106 @@ function Registros(){
 		setShow(true)
 	}
 
+	function previousPage(){
+
+		if(activePage === firstPage){
+			setFirstPage(firstPage - 1)
+			setLastPage(lastPage - 1)
+		}
+		mudarPaginaAtiva(activePage - 1)
+	}
+	function nextPage(){
+
+		if(activePage === lastPage){
+			setFirstPage(firstPage + 1)
+			setLastPage(lastPage + 1)
+		}
+		mudarPaginaAtiva(activePage + 1)
+	}
+	function activateFirstPage(){
+		setFirstPage(1)
+		setLastPage(10)
+		mudarPaginaAtiva(1)
+	}
+	function activateLastPage(){
+		setLastPage(maxPage)
+		setFirstPage(maxPage > 10?maxPage - 9:1)		
+		mudarPaginaAtiva(maxPage)
+	}
+	function buildPaginationItems(){
+		var numeroRegistros = registrosFiltrados.length
+		var items = []
+		var paginasAMostrar = Math.ceil(numeroRegistros/numeroRegistrosExibidos);
+		//setMaxPage(paginasAMostrar)
+		//console.log('pagina maxima',maxPage)
+
+		items.push(<Pagination.First disabled={activePage === 1} onClick={() => activateFirstPage()}/>)
+		items.push(<Pagination.Prev disabled={activePage === 1} onClick={() => previousPage()}/>)
+		for (let number = firstPage; number <= Math.min(lastPage,paginasAMostrar); number++) {
+  			items.push(
+    			<Pagination.Item key={number} active={number === activePage} onClick={() => mudarPaginaAtiva(number)}>{number} </Pagination.Item>
+    		);
+		}
+
+		items.push(<Pagination.Next disabled={activePage === maxPage} onClick={() => nextPage()}/>)
+		items.push(<Pagination.Last disabled={activePage === maxPage} onClick={() => activateLastPage()}/>)
+
+		return items
+	}
+
+	function mudarPaginaAtiva(number){
+		setActivePage(number)
+		//console.log('Pagina escolhida',number)
+		//console.log('Ultima pagina',lastPage)
+		var primeiroRegistro = (number-1)*numeroRegistrosExibidos
+		setFirstRecord(primeiroRegistro)
+		//console.log('Primeiro registro',primeiroRegistro)
+		var ultimoRegistro = number*numeroRegistrosExibidos - 1
+		setLastRecord(number*numeroRegistrosExibidos - 1)
+		//console.log('Umtimo registro',ultimoRegistro)
+		setRegistrosExibidos(registrosFiltrados.slice(primeiroRegistro,Math.min(ultimoRegistro +1,registrosFiltrados.length)))
+	}
+
+	function construirLinhasRegistros(){
+		var linhas = [];
+			for(var i = firstRecord; i <= lastRecord; i++) {
+				var r = registrosFiltrados[i];
+				if(r){
+					linhas.push(
+						<tr key={r.id}>
+							<td className='py-0 f-s-12 text-center'><Link onClick={()=> openModalRegistro(r)}><MdVisibility /></Link></td>
+							<td className='py-0 f-s-12'>{formatData(r.dataNotificacao)}</td>
+							<td className='py-0 f-s-12'>{removerEspacosBrancos(r.tipoTeste)}</td>
+							<td className='py-0 f-s-12'>{r.estadoResidencia}</td>
+							<td className='py-0 f-s-12'>{r.municipio}</td>
+							<td className='py-0 f-s-12'>{r.bairro}</td>
+							<td className='py-0 f-s-12'>{r.resultadoTeste?'Positivo':'Negativo'}</td>
+							<td className='py-0 f-s-12'>{r.cep}</td>
+						</tr>
+					);
+				}
+			}
+		return linhas;
+	}
+
     useEffect(() => {
         const fetchData = async () => {
           const registrosBuscados = 
-            await axios.get('http://localhost:8080/registros');
+            //await axios.get('http://localhost:8080/registros');
+            await axios.get(BACK_END_URL+'/registros');
             setRegistros(registrosBuscados.data);
+            setRegistrosExibidos(registrosBuscados.data.records.slice(0,20))
+            console.log('Registro exibidos',registrosExibidos)
             setRegistrosFiltrados(registrosBuscados.data.records)
             setEstados(extrairEstados(registrosBuscados.data.records))
             setTiposTeste(extrairTiposTeste(registrosBuscados.data.records))
             //setResultados(extrairResultados(registrosBuscados.data.records))
             console.log('Registros',registrosBuscados.data)
             //console.log('Resultados',resultados)
+			var paginasAMostrar = Math.ceil(registrosBuscados.data.records.length/numeroRegistrosExibidos);
+			setMaxPage(paginasAMostrar)
         };
-        fetchData();     
+        fetchData();
       },[] );
 
     function aplicarFiltros(){
@@ -71,8 +167,11 @@ function Registros(){
     	var resultado = document.getElementById('resultado').value;
     	filtro = filtrarPorResultado(filtro,resultado)
     	setRegistrosFiltrados(filtro)
-
-
+    	setFirstPage(1)
+    	var paginasAMostrar = Math.ceil(filtro.length/numeroRegistrosExibidos);
+		setMaxPage(paginasAMostrar)
+    	setRegistrosExibidos(filtro.slice(0,Math.min(19 +1,filtro.length)))
+    	setLastPage(paginasAMostrar > 10?10:paginasAMostrar)
 	}
 	function filtrarPorEstado(estado){
 		return registros.records.filter( r =>
@@ -133,6 +232,18 @@ function Registros(){
 		setBairrosFiltrados(bairros)
 	}
 
+	function mudarNumeroRegistrosExibir(){
+		var opcao = document.getElementById('exibir').value;
+		console.log('Tipo de opcao',typeof opcao)
+		console.log('Opcao',opcao)
+		opcao = parseInt(opcao)
+		console.log('Opcao int',opcao)
+		if (opcao !== 0){
+			if(numeroRegistrosExibidos !== opcao){
+				setNumeroRegistrosExibidos(opcao)
+			}
+		}
+	}
 	return(
 		<div className='animated fadeIn'>
 			<ModalViewRegistro show={show} handleClose={handleClose} registro={registroSelecionado}/>
@@ -174,14 +285,23 @@ function Registros(){
 					    		)}
 						</Form.Control>
 	  				</div>
-	  				<div className='col-2 ml-0 pl-0'>
-	  					<Form.Control id='resultado' as='select' className='f-s-13'>
+	  				<div className='col-2 pl-0'>
+	  					<Form.Control id='resultado' as='select' className='px-0 f-s-13'>
 					    	<option hidden value='Resultado'>Resultado</option>
 					    	<option value=''>Todos</option>
 					    	<option value='Positivo'>Positivo</option>
 					    	<option value='Negativo'>Negativo</option>
 						</Form.Control>
 	  				</div>
+	  				{/* <div className='col-1 ml-0 pl-0'>
+	  					<Form.Control id='exibir' as='select' className='px-0 f-s-13' onChange={() => mudarNumeroRegistrosExibir()}>
+					    	<option hidden value={0}>Exibir</option>
+					    	<option value={20}>20</option>
+					    	<option value={30}>30</option>
+					    	<option value={40}>40</option>
+					    	<option value={50}>50</option>
+						</Form.Control>
+	  				</div> */}
 	  				<div className='col'>
 	  				</div>
 	  				<div className='col-1 px-0'>
@@ -190,13 +310,18 @@ function Registros(){
 	  				</div>
 	  			</div>
 	  			<div className='py-2 f-s-14 font-weight-bold'>
-  					Registros encontrados: {registrosFiltrados.length}
+  					Registros encontrados: {registrosFiltrados.length} (exibindo {numeroRegistrosExibidos} por página)
+  				</div>
+  				<div>
+  					<Pagination size='sm'>
+					  {buildPaginationItems()}
+					</Pagination>
   				</div>
   				<div className='scroll-y h-600 mt-2'>
   					<Table hover striped bordered responsive>
   						<thead>
 						    <tr className='f-s-13 text-center align-middle'>
-						      <th className='py-1 col-width-20 align-middle'>View</th>
+						      <th className='py-1 col-width-20 align-middle'>Ver</th>
 						      <th className='py-1 col-width-50 align-middle'>Data Notificação</th>
 						      <th className='py-1 align-middle'>Tipo de teste</th>
 						      <th className='py-1 align-middle'>Estado</th>
@@ -207,7 +332,7 @@ function Registros(){
 						    </tr>
 						</thead>
 						<tbody>
-							{registrosFiltrados.map( r => 
+							{ registrosExibidos.map( r =>
 									<tr key={r.id}>
 										<td className='py-0 f-s-12 text-center'><Link onClick={()=> openModalRegistro(r)}><MdVisibility /></Link></td>
 										<td className='py-0 f-s-12'>{formatData(r.dataNotificacao)}</td>
@@ -219,6 +344,8 @@ function Registros(){
 										<td className='py-0 f-s-12'>{r.cep}</td>
 									</tr>
 								)}
+
+							
 						</tbody>
   					</Table>
   				</div>
