@@ -13,7 +13,7 @@ function ModalViewRegistro(props) {
 		<div className='animated fadeIn'>
 		    <Modal
 		      show={props.show}
-		      size="md"
+		      size="lg"
 		      aria-labelledby="contained-modal-title-vcenter"
 		      centered
 		      onHide={props.handleClose}
@@ -49,10 +49,10 @@ function ModalViewRegistro(props) {
 								<td className='py-0'>Bairro</td>
 								<td className='py-0'>{registro?registro.bairro:''}</td>
 							</tr>
-							<tr>
+							{/* <tr>
 								<td className='py-0'>CEP</td>
 								<td className='py-0'>{registro?registro.cep:''}</td>
-							</tr>
+							</tr> */}
 							<tr>
 								<td className='py-0'>Resultado do teste</td>
 								<td className='py-0 font-weight-bold'>{registro?registro.resultadoTeste?'Positivo':'Negativo':''}</td>
@@ -125,10 +125,10 @@ function ModalViewRegistro(props) {
 								<td className='py-0'>Data de coleta do teste</td>
 								<td className='py-0'>{registro?formatData(registro.dataColetaTeste):''}</td>
 							</tr>
-							<tr>
+							{/* <tr>
 								<td className='py-0'>Data de nascimento</td>
 								<td className='py-0'>{registro?formatData(registro.dataNascimento):''}</td>
-							</tr>
+							</tr> */}
 							<tr>
 								<td className='py-0'>Data de encerramento</td>
 								<td className='py-0'>{registro?formatData(registro.dataEncerramento):''}</td>

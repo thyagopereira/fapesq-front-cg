@@ -11,7 +11,7 @@ Type=forking
 #PIDFile=/var/run/leda-server.pid
 
 #Comando que inicializa o servi�o
-ExecStart=/home/ubuntu/fapesq-front-cg/start-server.sh
+ExecStart=/home/ubuntu/fapesq-front-server/start-server.sh
 # -daemon -pidfile /var/run/leda-server.pid
 #Comando que gera o reload do servico
 #ExecReload=/usr/bin/vde_switch reload

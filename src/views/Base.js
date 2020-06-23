@@ -5,7 +5,7 @@ function Base(){
 		<div className='animated fadeIn'>
   			<div align='justify'>
   				<p> 
-  				Pagina para permitir upload da nova base
+  				Pagina para permitir upload da nova base. Em construção!!!
   				</p>
   			</div>
   		</div>

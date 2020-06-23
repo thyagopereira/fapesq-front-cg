@@ -5,9 +5,10 @@ import {Form,Table,Button,Pagination} from 'react-bootstrap'
 import { MdVisibility } from "react-icons/md";
 import {BACK_END_URL,extrairEstados,extrairTiposTeste,extrairResultados,formatData,extrairMunicipios,extrairBairros,removerEspacosBrancos} from '../utils/Utils'
 import ModalViewRegistro from './ModalViewRegistro'
+import context from '../utils/Context'
 
 function Registros(){
-	
+	const { state } = React.useContext(context);
 	const [registros,setRegistros] = React.useState(undefined);
 	const [registrosFiltrados, setRegistrosFiltrados] = React.useState([]);
 	const [estados,setEstados] = React.useState([]);
@@ -125,24 +126,20 @@ function Registros(){
 	}
 
     useEffect(() => {
-        const fetchData = async () => {
-          const registrosBuscados = 
-            //await axios.get('http://localhost:8080/registros');
-            await axios.get(BACK_END_URL+'/registros');
-            setRegistros(registrosBuscados.data);
-            setRegistrosExibidos(registrosBuscados.data.records.slice(0,20))
-            console.log('Registro exibidos',registrosExibidos)
-            setRegistrosFiltrados(registrosBuscados.data.records)
-            setEstados(extrairEstados(registrosBuscados.data.records))
-            setTiposTeste(extrairTiposTeste(registrosBuscados.data.records))
+        if(state.dataInfo){
+        	setRegistros(state.dataInfo)
+        	setRegistrosExibidos(state.dataInfo.records.slice(0,20))
+            //console.log('Registro exibidos',registrosExibidos)
+            setRegistrosFiltrados(state.dataInfo.records)
+            setEstados(extrairEstados(state.dataInfo.records))
+            setTiposTeste(extrairTiposTeste(state.dataInfo.records))
             //setResultados(extrairResultados(registrosBuscados.data.records))
-            console.log('Registros',registrosBuscados.data)
+            //console.log('Registros',registrosBuscados.data)
             //console.log('Resultados',resultados)
-			var paginasAMostrar = Math.ceil(registrosBuscados.data.records.length/numeroRegistrosExibidos);
+			var paginasAMostrar = Math.ceil(state.dataInfo.records.length/numeroRegistrosExibidos);
 			setMaxPage(paginasAMostrar)
-        };
-        fetchData();
-      },[] );
+        }
+      },[state.dataInfo] );
 
     function aplicarFiltros(){
     	var estado = document.getElementById('estado').value;
@@ -245,9 +242,20 @@ function Registros(){
 		}
 	}
 	return(
-		<div className='animated fadeIn'>
+		<div className='animated fadeIn mt-0 pt-0'>
 			<ModalViewRegistro show={show} handleClose={handleClose} registro={registroSelecionado}/>
   			<div align='justify'>
+	  			<div className='f-s-14'>
+	  				<p>
+	  				Instruções:
+	  				<ul>
+	  					<li> Selecione um estado para habilitar os municípios</li>
+	  					<li> Selecione um município para habilitar os bairros</li>
+	  					<li> Selecione os demais campos (Tipo de Teste e Resultado) e clique 
+	  					no botão de filtrar. Use os botões de navegação de páginas</li>
+	  				</ul>
+	  				</p>
+	  			</div>
 	  			<div className='row'>
 	  				<div className='col-2 mr-0'>
 	  					<Form.Control id='estado' as='select' className='f-s-13' onChange={()=>selectEstado()}>
@@ -322,26 +330,26 @@ function Registros(){
   						<thead>
 						    <tr className='f-s-13 text-center align-middle'>
 						      <th className='py-1 col-width-20 align-middle'>Ver</th>
-						      <th className='py-1 col-width-50 align-middle'>Data Notificação</th>
+						      <th className='py-1 align-middle'>Data Notificação</th>
 						      <th className='py-1 align-middle'>Tipo de teste</th>
 						      <th className='py-1 align-middle'>Estado</th>
 						      <th className='py-1 align-middle'>Município</th>
 						      <th className='py-1 align-middle'>Bairro</th>
 						      <th className='py-1 align-middle'>Resultado</th>
-						      <th className='py-1 align-middle'>CEP</th>
+						      {/* <th className='py-1 align-middle'>CEP</th> */}
 						    </tr>
 						</thead>
 						<tbody>
 							{ registrosExibidos.map( r =>
 									<tr key={r.id}>
 										<td className='py-0 f-s-12 text-center'><Link onClick={()=> openModalRegistro(r)}><MdVisibility /></Link></td>
-										<td className='py-0 f-s-12'>{formatData(r.dataNotificacao)}</td>
+										<td className='py-0 f-s-12 text-center'>{formatData(r.dataNotificacao)}</td>
 										<td className='py-0 f-s-12'>{removerEspacosBrancos(r.tipoTeste)}</td>
 										<td className='py-0 f-s-12'>{r.estadoResidencia}</td>
 										<td className='py-0 f-s-12'>{r.municipio}</td>
 										<td className='py-0 f-s-12'>{r.bairro}</td>
 										<td className='py-0 f-s-12'>{r.resultadoTeste?'Positivo':'Negativo'}</td>
-										<td className='py-0 f-s-12'>{r.cep}</td>
+										{/* <td className='py-0 f-s-12'>{r.cep}</td> */}
 									</tr>
 								)}
 
