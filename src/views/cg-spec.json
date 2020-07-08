@@ -1,0 +1,80 @@
+{ 
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "white",
+  "padding": 5,
+  "width": 1000,
+  "height": 580,
+  "style": "cell",
+  "data": [
+    {
+      "name": "source_1",
+      "url": "https://raw.githubusercontent.com/IannCarvalho/VegaLite-Skills/master/result.csv",
+      "format": {"type": "csv"}
+    },
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/IannCarvalho/VegaLite-Skills/master/CG_BairrosEGL.json",
+      "format": {"type": "topojson", "feature": "CG_BairrosEGL"},
+      "transform": [
+        {
+          "type": "lookup",
+          "from": "source_1",
+          "key": "nome",
+          "fields": ["properties.nome"],
+          "values": ["escolas", "nome"]
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"escolas\"]) && isFinite(+datum[\"escolas\"])"
+        }
+      ]
+    }
+  ],
+  "projections": [
+    {
+      "name": "projection",
+      "size": {"signal": "[width, height]"},
+      "fit": {"signal": "data('source_0')"}
+    }
+  ],
+  "marks": [
+    {
+      "name": "marks",
+      "type": "shape",
+      "style": ["geoshape"],
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "fill": {"scale": "color", "field": "escolas"},
+          "tooltip": {
+            "signal": "{\"nome\": isValid(datum[\"nome\"]) ? datum[\"nome\"] : \"\"+datum[\"nome\"], \"escolas\": format(datum[\"escolas\"], \"\")}"
+          },
+          "ariaRoleDescription": {"value": "geoshape"},
+          "description": {
+            "signal": "\"nome\" + \": \" + (isValid(datum[\"nome\"]) ? datum[\"nome\"] : \"\"+datum[\"nome\"]) + \"; \" + \"escolas\" + \": \" + (format(datum[\"escolas\"], \"\")) + \"; \" + \"Número de escolas no bairro\" + \": \" + (format(datum[\"escolas\"], \"\"))"
+          }
+        }
+      },
+      "transform": [{"type": "geoshape", "projection": "projection"}]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "quantize",
+      "domain": {"data": "source_0", "field": "escolas"},
+      "range": {"scheme": "blues"},
+      "interpolate": "hcl",
+      "zero": false
+    }
+  ],
+  "legends": [
+    {
+      "direction": "horizontal",
+      "orient": "bottom-right",
+      "title": "Número de escolas no bairro",
+      "fill": "color",
+      "symbolType": "circle"
+    }
+  ]
+}
