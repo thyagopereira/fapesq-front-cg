@@ -3,6 +3,7 @@ import * as bs from 'bootstrap/dist/css/bootstrap.css';
 import {BrowserRouter} from 'react-router-dom'
 import './App.css';
 import Principal from './Principal'
+import MainPanel from './MainPanel'
 import context from './utils/Context'
 import {BACK_END_URL} from './utils/Utils'
 import axios from 'axios'
@@ -30,7 +31,7 @@ function App() {
       }}
     >
       <BrowserRouter>
-        <Principal />
+        <MainPanel />
       </BrowserRouter>
     </Provider>
   );

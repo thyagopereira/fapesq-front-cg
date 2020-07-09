@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {Link} from 'react-router-dom'
-import {Form,Table,Button,Pagination} from 'react-bootstrap'
+import {Form,Table,Button,Pagination,OverlayTrigger,Tooltip} from 'react-bootstrap'
 import { MdVisibility } from "react-icons/md";
 import {extrairEstados,extrairTiposTeste,formatData,extrairMunicipios,extrairBairros,removerEspacosBrancos} from '../utils/Utils'
 import ModalViewRegistro from './ModalViewRegistro'
@@ -224,44 +224,64 @@ function Registros(){
 		<div className='animated fadeIn mt-0 pt-0'>
 			<ModalViewRegistro show={show} handleClose={handleClose} registro={registroSelecionado}/>
   			<div align='justify'>
-	  			<div className='f-s-14'>
-	  				<div>
-	  				Instruções:
-	  				<ul>
-	  					<li> Selecione um estado para habilitar os municípios</li>
-	  					<li> Selecione um município para habilitar os bairros</li>
-	  					<li> Selecione os demais campos (Tipo de Teste e Resultado) e clique 
-	  					no botão de filtrar. Use os botões de navegação de páginas</li>
-	  				</ul>
+	  			<div className='f-s-15'>
+	  				<div className='font-weight-bold text-uppercase py-2'>
+	  					Busca avançada e filtros sobre registros
 	  				</div>
 	  			</div>
 	  			<div className='row'>
 	  				<div className='col-2 mr-0'>
-	  					<Form.Control id='estado' as='select' className='f-s-13' onChange={()=>selectEstado()}>
-					    	<option hidden value='Estado'>Estado</option>
-					    	<option value=''>Todos</option>
-					    	{estados.map( e => 
-					    		<option key={e} value={e}>{e}</option>
-					    		)}
-						</Form.Control>
+	  					<OverlayTrigger 
+      						placement='bottom'
+							overlay=
+							<Tooltip id='tooltip-select-estado'>
+								Selecione um estado para habilitar municípios
+							</Tooltip>
+						>
+							<Form.Control id='estado' as='select' className='f-s-13' onChange={()=>selectEstado()}>
+								<option hidden value='Estado'>Estado</option>
+								<option value=''>Todos</option>
+									{estados.map( e => 
+										<option key={e} value={e}>{e}</option>
+									)}
+							</Form.Control>
+						</OverlayTrigger>
+
+	  					
 	  				</div>
 	  				<div className='col-2 mr-0'>
-	  					<Form.Control id='municipio' as='select' className='f-s-13' disabled={estadoSelected === undefined} onChange={()=>selectMunicipio()}>
-					    	<option hidden value='Municipio'>Município</option>
-					    	<option value=''>Todos</option>
-					    	{municipiosFiltrados.map( m => 
-					    		<option key={m} value={m}>{m}</option>
-					    		)}
-						</Form.Control>
+	  					<OverlayTrigger 
+      						placement='bottom'
+							overlay=
+							<Tooltip id='tooltip-select-municipio'>
+								Selecione um município para habilitar bairros
+							</Tooltip>
+						>
+							<Form.Control id='municipio' as='select' className='f-s-13' disabled={estadoSelected === undefined} onChange={()=>selectMunicipio()}>
+						    	<option hidden value='Municipio'>Município</option>
+						    	<option value=''>Todos</option>
+						    	{municipiosFiltrados.map( m => 
+						    		<option key={m} value={m}>{m}</option>
+						    		)}
+							</Form.Control>
+						</OverlayTrigger>
 	  				</div>
 	  				<div className='col-2 mr-0'>
-	  					<Form.Control id='bairro' as='select' className='f-s-13' disabled={municipioSelected === undefined}>
-					    	<option hidden value='Bairro'>Bairro</option>
-					    	<option value=''>Todos</option>
-					    	{bairrosFiltrados.map( b => 
-					    		<option key={b} value={b}>{b}</option>
-					    		)}
-						</Form.Control>
+	  					<OverlayTrigger 
+      						placement='bottom'
+							overlay=
+							<Tooltip id='tooltip-select-bairro'>
+								Selecione um bairro
+							</Tooltip>
+						>
+							<Form.Control id='bairro' as='select' className='f-s-13' disabled={municipioSelected === undefined}>
+						    	<option hidden value='Bairro'>Bairro</option>
+						    	<option value=''>Todos</option>
+						    	{bairrosFiltrados.map( b => 
+						    		<option key={b} value={b}>{b}</option>
+						    		)}
+							</Form.Control>
+						</OverlayTrigger>
 	  				</div>
 	  				<div className='col-2 ml-0 pl-0'>
 	  					<Form.Control id='tipoTeste' as='select' className='f-s-13'>
