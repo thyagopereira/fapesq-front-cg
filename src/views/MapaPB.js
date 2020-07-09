@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import * as vega from 'vega'
-import spec from "./cg-spec.json";
+import spec from "./pb-spec.json";
 
-function MapaCG(){
+function MapaPB(){
 
 	useEffect(() => {
 		const script = document.createElement("script");
@@ -12,18 +12,18 @@ function MapaCG(){
     	script.async = true;
     	document.head.appendChild(script);
 
-		//console.log('Adicionado script',document)
+		console.log('Adicionado script',document)
 
         render(spec)
 
-            function render(specif) {
-              new vega.View(vega.parse(specif), {
+        function render(specif) {
+              var novoView = new vega.View(vega.parse(specif), {
                 renderer:  'canvas',  // renderer (canvas or svg)
                 container: '#view',   // parent DOM container
                 hover:     true       // enable hover processing
                 })
-                //console.log('View prenchido', novoView)
-            }
+                console.log('View prenchido', novoView)
+        }
 
     },[])
 
@@ -34,4 +34,4 @@ function MapaCG(){
     );
 }
 
-export default MapaCG;
+export default MapaPB;

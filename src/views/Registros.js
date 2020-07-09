@@ -1,9 +1,8 @@
 import React, {useEffect} from 'react'
-import axios from 'axios'
 import {Link} from 'react-router-dom'
 import {Form,Table,Button,Pagination} from 'react-bootstrap'
 import { MdVisibility } from "react-icons/md";
-import {BACK_END_URL,extrairEstados,extrairTiposTeste,extrairResultados,formatData,extrairMunicipios,extrairBairros,removerEspacosBrancos} from '../utils/Utils'
+import {extrairEstados,extrairTiposTeste,formatData,extrairMunicipios,extrairBairros,removerEspacosBrancos} from '../utils/Utils'
 import ModalViewRegistro from './ModalViewRegistro'
 import context from '../utils/Context'
 
@@ -25,7 +24,7 @@ function Registros(){
 	const [firstPage,setFirstPage] = React.useState(1); //primeira pagina mostrada
 	const [lastPage,setLastPage] = React.useState(10); //ultima pagina mostrada
 	const [maxPage,setMaxPage] = React.useState(10);
-	const [paginationItems,setPaginationItems] = React.useState([]);
+	//const [paginationItems,setPaginationItems] = React.useState([]);
 	const [firstRecord,setFirstRecord] = React.useState(1);
 	const [lastRecord,setLastRecord] = React.useState(19);
 	const [registrosExibidos,setRegistrosExibidos] = React.useState([]);
@@ -34,7 +33,7 @@ function Registros(){
   		setShow(false)
   		setRegistroSelecionado(undefined)
   	}
-  	const handleShow = () => setShow(true);
+  	//const handleShow = () => setShow(true);
 
 
 	//const [resultados,setResultados] = React.useState([]);
@@ -76,16 +75,16 @@ function Registros(){
 		//setMaxPage(paginasAMostrar)
 		//console.log('pagina maxima',maxPage)
 
-		items.push(<Pagination.First disabled={activePage === 1} onClick={() => activateFirstPage()}/>)
-		items.push(<Pagination.Prev disabled={activePage === 1} onClick={() => previousPage()}/>)
+		items.push(<Pagination.First key='first' disabled={activePage === 1} onClick={() => activateFirstPage()}/>)
+		items.push(<Pagination.Prev key='prev-first' disabled={activePage === 1} onClick={() => previousPage()}/>)
 		for (let number = firstPage; number <= Math.min(lastPage,paginasAMostrar); number++) {
   			items.push(
     			<Pagination.Item key={number} active={number === activePage} onClick={() => mudarPaginaAtiva(number)}>{number} </Pagination.Item>
     		);
 		}
 
-		items.push(<Pagination.Next disabled={activePage === maxPage} onClick={() => nextPage()}/>)
-		items.push(<Pagination.Last disabled={activePage === maxPage} onClick={() => activateLastPage()}/>)
+		items.push(<Pagination.Next key='next-last' disabled={activePage === maxPage} onClick={() => nextPage()}/>)
+		items.push(<Pagination.Last key='last' disabled={activePage === maxPage} onClick={() => activateLastPage()}/>)
 
 		return items
 	}
@@ -103,27 +102,7 @@ function Registros(){
 		setRegistrosExibidos(registrosFiltrados.slice(primeiroRegistro,Math.min(ultimoRegistro +1,registrosFiltrados.length)))
 	}
 
-	function construirLinhasRegistros(){
-		var linhas = [];
-			for(var i = firstRecord; i <= lastRecord; i++) {
-				var r = registrosFiltrados[i];
-				if(r){
-					linhas.push(
-						<tr key={r.id}>
-							<td className='py-0 f-s-12 text-center'><Link onClick={()=> openModalRegistro(r)}><MdVisibility /></Link></td>
-							<td className='py-0 f-s-12'>{formatData(r.dataNotificacao)}</td>
-							<td className='py-0 f-s-12'>{removerEspacosBrancos(r.tipoTeste)}</td>
-							<td className='py-0 f-s-12'>{r.estadoResidencia}</td>
-							<td className='py-0 f-s-12'>{r.municipio}</td>
-							<td className='py-0 f-s-12'>{r.bairro}</td>
-							<td className='py-0 f-s-12'>{r.resultadoTeste?'Positivo':'Negativo'}</td>
-							<td className='py-0 f-s-12'>{r.cep}</td>
-						</tr>
-					);
-				}
-			}
-		return linhas;
-	}
+	
 
     useEffect(() => {
         if(state.dataInfo){
@@ -246,7 +225,7 @@ function Registros(){
 			<ModalViewRegistro show={show} handleClose={handleClose} registro={registroSelecionado}/>
   			<div align='justify'>
 	  			<div className='f-s-14'>
-	  				<p>
+	  				<div>
 	  				Instruções:
 	  				<ul>
 	  					<li> Selecione um estado para habilitar os municípios</li>
@@ -254,7 +233,7 @@ function Registros(){
 	  					<li> Selecione os demais campos (Tipo de Teste e Resultado) e clique 
 	  					no botão de filtrar. Use os botões de navegação de páginas</li>
 	  				</ul>
-	  				</p>
+	  				</div>
 	  			</div>
 	  			<div className='row'>
 	  				<div className='col-2 mr-0'>

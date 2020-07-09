@@ -6,6 +6,7 @@ import Registros from './views/Registros'
 import Base from './views/Base'
 import Sobre from './views/Sobre'
 import MapaCG from './views/MapaCG'
+import MapaPB from './views/MapaPB'
 
 function Principal() {
   return (
@@ -16,6 +17,7 @@ function Principal() {
 						<div className='pt-2'/>
 						<Link to='/registros' className='text-decoration-none'><Button className='my-1' size="xl" block variant='light'>Registros</Button></Link>
 						<Link to='/base' className='text-decoration-none'><Button className='my-1' size="xl" block variant='light'>Base de Dados</Button></Link>
+						<Link to='/mapapb' className='text-decoration-none'><Button className='my-1' size="xl" block variant='light'>Mapa PB</Button></Link>
 						<Link to='/mapacg' className='text-decoration-none'><Button className='my-1' size="xl" block variant='light'>Mapa CG</Button></Link>
 						<Link to='/sobre' className='text-decoration-none'><Button className='my-1' size="xl" block variant='light'>Sobre</Button></Link>
 					</div>
@@ -24,6 +26,7 @@ function Principal() {
 				          	<Route path='/' component={Registros} exact />
 				          	<Route path='/registros' component={Registros}/>
 				          	<Route path='/base' component={Base}/>
+				          	<Route path='/mapapb' component={MapaPB}/>
 				          	<Route path='/mapacg' component={MapaCG}/>
 				          	<Route path='/sobre' component={Sobre}/>
 				        </Switch>

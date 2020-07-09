@@ -1,0 +1,85 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "white",
+  "padding": 5,
+  "width": 1000,
+  "height": 600,
+  "style": "cell",
+  "data": [
+    {
+      "name": "source_1",
+      "url": "https://raw.githubusercontent.com/arthuralv/FrontMapTest/81d0a5db687c16391deb9a4b4cbfb653722622e2/cases_per_1000_filtered.csv",
+      "format": {"type": "csv", "delimiter": ","}
+    },
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/arthuralv/FrontMapTest/master/map.json",
+      "format": {"type": "topojson", "feature": "PB_CIDADES"},
+      "transform": [
+        {
+          "type": "lookup",
+          "from": "source_1",
+          "key": "city",
+          "fields": ["properties.NM_MUNICIP"],
+          "values": ["city", "Ncasos/1000H"]
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"Ncasos/1000H\"]) && isFinite(+datum[\"Ncasos/1000H\"])"
+        }
+      ]
+    }
+  ],
+  "projections": [
+    {
+      "name": "projection",
+      "size": {"signal": "[width, height]"},
+      "fit": {"signal": "data('source_0')"}
+    }
+  ],
+  "marks": [
+    {
+      "name": "marks",
+      "type": "shape",
+      "style": ["geoshape"],
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "fill": {"scale": "color", "field": "Ncasos/1000H"},
+          "tooltip": {
+            "signal": "{\"city\": isValid(datum[\"city\"]) ? datum[\"city\"] : \"\"+datum[\"city\"], \"Ncasos/1000H\": format(datum[\"Ncasos/1000H\"], \"\")}"
+          },
+          "ariaRoleDescription": {"value": "geoshape"},
+          "description": {
+            "signal": "\"city\" + \": \" + (isValid(datum[\"city\"]) ? datum[\"city\"] : \"\"+datum[\"city\"]) + \"; \" + \"Ncasos/1000H\" + \": \" + (format(datum[\"Ncasos/1000H\"], \"\")) + \"; \" + \"Casos por 1000 habitantes\" + \": \" + (format(datum[\"Ncasos/1000H\"], \"\"))"
+          }
+        }
+      },
+      "transform": [{"type": "geoshape", "projection": "projection"}]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "linear",
+      "domain": [0, 2.5, 5, 7.5, 10, 12.5, 15, 17.5, 20, 25, 30, 35, 40],
+      "range": {"scheme": "purples", "count": 12},
+      "interpolate": "hcl",
+      "zero": true
+    }
+  ],
+  "legends": [
+    {
+      "direction": "horizontal",
+      "gradientLength": 350,
+      "gradientStrokeWidth": 1,
+      "orient": "bottom-left",
+      "padding": 10,
+      "strokeColor": "blues",
+      "title": "Casos por 1000 habitantes",
+      "titleAnchor": "middle",
+      "fill": "color",
+      "symbolType": "circle"
+    }
+  ]
+}
