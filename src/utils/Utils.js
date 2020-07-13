@@ -1,5 +1,5 @@
-//export const BACK_END_URL = "http://localhost:8080";
-export const BACK_END_URL = "http://150.165.15.44:8081";
+export const BACK_END_URL = "http://localhost:8080";
+//export const BACK_END_URL = "http://150.165.15.44:8081";
 
 export function unique (array) {
 	   var unique = new Set(array) ;

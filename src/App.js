@@ -11,13 +11,17 @@ import axios from 'axios'
 function App() {
   const { Provider } = context;
   const [state, setState] = React.useState({
-    dataInfo:undefined
+    dataInfo:undefined,
+    historicoPB:undefined
   });
 
   useEffect(() => {
     const fetchData = async () => {
       const dataInfoBuscado = await axios.get(BACK_END_URL+'/registros');
       setState({ ...state,  dataInfo:dataInfoBuscado.data});
+
+      const historicoPBBuscado = await axios.get(BACK_END_URL+'/pbdatafiltered');
+      setState({ ...state,  historicoPB:historicoPBBuscado.data});
     }
     
     fetchData();  

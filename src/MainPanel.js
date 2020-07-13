@@ -2,7 +2,7 @@ import React from 'react'
 
 import {Route,Switch,Link} from 'react-router-dom'
 import {Button,Card,OverlayTrigger,Tooltip,Popover} from 'react-bootstrap'
-import Registros from './views/Registros'
+import TabFiltros from './views/TabFiltros'
 import Base from './views/Base'
 import Sobre from './views/Sobre'
 import Tutorial from './views/Tutorial'
@@ -120,8 +120,8 @@ function MainPanel() {
 			<div className='row mt-2 mr-4 pl-4 w-100'>
 				<div className='col-9'>
 					    <Switch>
-				          	<Route path='/' component={Registros} exact />
-				          	<Route path='/registros' component={Registros}/>
+				          	<Route path='/' component={TabFiltros} exact />
+				          	<Route path='/registros' component={TabFiltros}/>
 				          	<Route path='/base' component={Base}/>
 				          	<Route path='/mapapb' component={MapaPB}/>
 				          	<Route path='/mapacg' component={MapaCG}/>
