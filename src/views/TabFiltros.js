@@ -8,7 +8,7 @@ function TabFiltros(){
 
 	return(
 		<div className='animated fadeIn'>
-  			<Tabs className='f-s-14' defaultActiveKey="tab-rec-desp" id="tab-dados">
+  			<Tabs className='f-s-14' defaultActiveKey="tab-registros" id="tab-dados">
 			  <Tab eventKey="tab-registros" title="Registros">
 			    <div >
 			    	<Registros />
