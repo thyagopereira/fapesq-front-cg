@@ -28,7 +28,7 @@ function MainPanel() {
 										          Registros e filtros
 										      </Tooltip>
 										>
-						      				<Button className='pl-2 my-auto' size="md" block variant='light'><BsListUl /></Button>
+						      				<Button className='pl-2 my-auto' size="md" block variant='light'><BsListUl className='bt-menu'/></Button>
 						      			</OverlayTrigger>
 						      		</Link>
 						      	</div>
@@ -41,7 +41,7 @@ function MainPanel() {
 										          Atualizar base de dados
 										      </Tooltip>
 										>
-						      				<Button className='pl-2 my-auto mx-auto' size="md" block variant='light'><BsCloudUpload /></Button>
+						      				<Button className='pl-2 my-auto mx-auto' size="md" block variant='light'><BsCloudUpload className='bt-menu'/></Button>
 						      			</OverlayTrigger>
 						      			
 						      		</Link>
@@ -55,7 +55,7 @@ function MainPanel() {
 										          Mapa da Paraíba
 										      </Tooltip>
 										>
-						      				<Button className='pl-2 my-auto mx-auto' size="md" block variant='light'><GrMapLocation /></Button>
+						      				<Button className='pl-2 my-auto mx-auto' size="md" block variant='light'><GrMapLocation className='bt-menu' /></Button>
 						      			</OverlayTrigger>
 
 						      		</Link>
@@ -71,7 +71,7 @@ function MainPanel() {
 										          Mapa de Campina Grande
 										      </Tooltip>
 										>
-						      				<Button className='pl-2 my-auto' size="md" block variant='light'><GrMap /></Button>
+						      				<Button className='pl-2 my-auto' size="md" block variant='light'><GrMap className='bt-menu' /></Button>
 						      			</OverlayTrigger>
 						      		</Link>
 						      	</div>
@@ -84,7 +84,7 @@ function MainPanel() {
 										          Tutorial
 										      </Tooltip>
 										>
-						      				<Button className='pl-2 my-auto mx-auto' size="md" block variant='light'><BsBook /></Button>
+						      				<Button className='pl-2 my-auto mx-auto' size="md" block variant='light'><BsBook className='bt-menu' /></Button>
 						      			</OverlayTrigger>
 						      			
 						      		</Link>
@@ -95,10 +95,10 @@ function MainPanel() {
       										placement='right'
 										    overlay=
 										      <Tooltip id='tooltip-sobre'>
-										          Sobre
+										          Equipe e contatos
 										      </Tooltip>
 										>
-						      				<Button className='pl-2 my-auto mx-auto' size="md" block variant='light'><BsQuestionCircle /></Button>
+						      				<Button className='pl-2 my-auto mx-auto' size="md" block variant='light'><BsQuestionCircle className='bt-menu' /></Button>
 						      			</OverlayTrigger>
 
 						      		</Link>

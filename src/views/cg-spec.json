@@ -51,7 +51,7 @@
           },
           "ariaRoleDescription": {"value": "geoshape"},
           "description": {
-            "signal": "\"nome\" + \": \" + (isValid(datum[\"nome\"]) ? datum[\"nome\"] : \"\"+datum[\"nome\"]) + \"; \" + \"escolas\" + \": \" + (format(datum[\"escolas\"], \"\")) + \"; \" + \"Número de escolas no bairro\" + \": \" + (format(datum[\"escolas\"], \"\"))"
+            "signal": "\"nome\" + \": \" + (isValid(datum[\"nome\"]) ? datum[\"nome\"] : \"\"+datum[\"nome\"]) + \"; \" + \"escolas\" + \": \" + (format(datum[\"escolas\"], \"\")) + \"; \" + \"Número de casos no bairro\" + \": \" + (format(datum[\"escolas\"], \"\"))"
           }
         }
       },
@@ -72,7 +72,7 @@
     {
       "direction": "horizontal",
       "orient": "bottom-right",
-      "title": "Número de escolas no bairro",
+      "title": "Número de casos no bairro",
       "fill": "color",
       "symbolType": "circle"
     }
