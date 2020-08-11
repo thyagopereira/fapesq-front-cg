@@ -10,6 +10,7 @@ import MapaCG from './views/MapaCG'
 import MapaPB from './views/MapaPB'
 import { BsListUl,BsCloudUpload,BsQuestionCircle,BsBook } from "react-icons/bs"
 import { GrMapLocation,GrMap } from "react-icons/gr";
+import Logo from "./img/logo.jpg"
 
 function MainPanel() {
   return (
@@ -108,14 +109,8 @@ function MainPanel() {
 					</Card>
 				</div>
 				<div className='col pl-0 pr-0'>
-				    <Card className='gray-100'>
-							<Card.Body className='h-120px'>
-								Advertisement
-							</Card.Body>
-						</Card>
-					
+						<img src = {Logo} alt  = " "/>
 				</div>
-
 			</div>
 			<div className='row mt-2 mr-4 pl-4 w-100'>
 				<div className='col-9'>
