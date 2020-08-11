@@ -1,12 +1,14 @@
 import React from 'react'
 import Covid from '../img/coronavirus.jpg'
 import './Sobre.css'
+import Cards from './Cards.js'
 
 function Sobre(){
 	return(
 		<div className='animated fadeIn'>
 
 			<div className = 'conteudo'>
+			<br/>
 				<h3> Predição georreferenciada de surtos de Covid-19</h3>
 				<img  src = {Covid} alt  = "covid-19"/>
 					<p>
@@ -37,10 +39,14 @@ function Sobre(){
 				
 			</div>
 
+			<div className =  "about">
+					<h3> Equipe e contatos</h3>
+					<br></br>
+					<div>
+							<Cards />
+					</div>
 
-
-
-
+			</div>
   		</div>
 	);
 }
